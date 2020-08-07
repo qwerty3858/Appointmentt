@@ -1,0 +1,292 @@
+﻿@model AdminViewModel
+@{
+    ViewData["Title"] = "Admin";
+}
+@section Styles {
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+}
+
+<div class="modal fade" id="saveModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Randevu Güncelleme</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <input hidden id="apointmentId" />
+                    <div class="row">
+                        <div class=" col-md-2">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label class="form-control-label">Adınız : </label>
+                            <input id="inputName" type="text" class="form-control" />
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label class="form-control-label">Soyadınız : </label>
+                            <input id="inputSurname" type="text" class="form-control" />
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6" style="text-align:center">
+                                <label class="form-control-label">Randevu Tarihi : </label>
+                                <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+                                    <input style="text-align:center" id="inputStartDate" type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1" />
+                                    <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-control-label">Randevu Saati : </label>
+                                <input id="inputHour" type="text" class="form-control" />
+                            </div>
+
+                        </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label class="form-control-label">Araba Modelini Giriniz : </label>
+                                <input id="inputCarName" type="text" class="form-control" />
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-control-label">Model Yılı : </label>
+                                <input id="inputCarModel" type="text" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label class="form-control-label">Telefon Numaranız : </label>
+                                <input id="inputPhoneNumber" type="text" class="form-control" />
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-control-label">İl : </label>
+                                <input id="inputil" type="text" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label class="form-control-label">Plakanız : </label>
+                                <input id="inputPlaka" type="text" class="form-control" />
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label class="form-control-label">Eklemek İstediğiniz Açıklamayı Buraya Giriniz. : </label>
+                                <input id="inputDescription" type="text" class="form-control" />
+                            </div>
+                            <input type="hidden" id="selectUserId" />
+                        </div>
+
+</form>
+            </div>
+            <div class="modal-footer">
+                <div class="form-group col-md-6">
+                    <button data-id="Id" type="button" class="btn btn-primary btnSave">Güncelle ve Kaydet</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Araç Randevu Sistemi</h5>
+                <h6 class="card-subtitle mb-2 text-muted">@Model.User.Name @Model.User.Surname</h6>
+                <p class="card-text">Araç randevu sistemine hoş geldiniz.</p>
+                <a href="/Account/Logout" class="card-link">Çıkış Yap</a>
+            </div>
+        </div>
+        <br />
+        @*<ul class="list-group">
+            @foreach (var item in Model.Appointment)
+            {
+                <li data-value="@item.UserId" class="list-group-item">Sn. @item.Name @item.Surname<button class="btn btn-primary mt-2 pull-right"></button></li>
+            }
+        </ul>*@
+    </div>
+
+    <div class="col-md-9">
+       
+        <div class="card">
+            <div>
+                @using (Html.BeginForm("getTable", "Profile", FormMethod.Get))
+                {
+                    <p style="float:right; margin-top:10px; margin-right:19px">      
+                            Plaka veya isme Göre Ara: <input name="param" type="text" /> 
+                            <input id="ara" type="submit" value="Ara" style="width:70px;" />
+                    </p>
+                }
+            </div>
+
+            <div class="card-body">
+                <div id="getTable">
+                    <table style="table-layout: fixed; "  class="table table-bordered table-striped m-1 p-1">
+                        <tr style="text-align:center;">
+                            <th>Kullanıcı Adı</th>
+                            <th>Soyadı</th>
+                            <th>Telefon Numarası</th>
+                            <th>Plaka</th>
+                            <th>Başlangıç Tarihi</th>
+                            <th>Açıklama</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        @foreach (var item in Model.Appointment)
+                        {
+                    <tr style="text-align:center">
+                        <td hidden class="carName">@item.CarName</td>
+                        <td hidden class="carModel">@item.CarModel</td>
+                        <td style=" white-space: nowrap;" class="name">@item.Name </td>
+                        <td style=" white-space: nowrap;" class="surname"> @item.Surname</td>
+                        <td style=" white-space: nowrap;" class="phoneNumber">@item.PhoneNumber</td>
+                        <td style=" white-space: nowrap;" class="plaka">@item.Plaka</td>
+                        <td hidden class="il">@item.il</td>
+                        <td class="startDate">@item.StartDate</td>
+                        <td hidden class="ıd">@item.Id</td>
+                        <td hidden class="hour">@item.Hour</td>
+                        <td class="description">@item.Description</td>
+                        <td>
+                            <a data-id="@item.Id" class="btn btn-outline-danger btnDelete">Sil</a>
+                        </td>
+                        <td><button data-id="@item.Id" type="button" class="btn btn-outline-primary btnUpdate">Güncelle</button></td>
+                    </tr>
+                        }
+                    </table>
+                </div>
+
+             
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.28/moment-timezone-with-data-10-year-range.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
+   
+    <script>
+       
+        document.addEventListener('DOMContentLoaded', function () {
+            var events = [];
+            getAppointments();
+            $('#datetimepicker1').datetimepicker({
+                format: 'DD/MM/YYYY HH:mm'
+            });
+            function getAppointments() {
+                $.ajax({
+                    type: 'GET',
+                    url: 'http://localhost:57877/api/Appointments',
+                    success: function (response) {
+                        events = [];
+                        for (var i = 0; i < response.length; i++) {
+                            events.push({
+                                id: response[i].id,
+                                carName: response[i].carName,
+                                carModel: response[i].carModel,
+                                start: response[i].startDate,
+                                description: response[i].description,
+                                hour: response[i].hour,
+                                surname: response[i].surname,
+                                il: response[i].il,
+                                plaka: response[i].plaka,
+                                phoneNumber: response[i].phoneNumber,
+                                name: response[i].name
+                            });
+                        }
+                    },
+                    error: function () {
+                        $('#saveModal').modal('hide');
+                        alertify.error('Randevunuz eklenirken bir problem oluştu.');
+                    }
+                });
+            }
+
+            function saveAppointment(data) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/appointment/AddOrUpdateAppointment',
+                    data: data,
+                    success: function (response) {
+                            getAppointments();
+                            $('#saveModal').modal('hide');
+                            data.Id === "0" ? alertify.success('Randevunuz başarıyla eklendi.') : alertify.success('Randevunuz başarıyla güncellenmiştir.');
+                    },
+                    error: function () {
+                        $('#saveModal').modal('hide');
+                        alertify.error('Erişim sağlanamadı.');
+                    }
+                });
+            }
+
+            $('.btnSave').click(function () {
+
+                var appointment = {
+                    Id: $('#apointmentId').val(),
+                    UserId: $('#selectUserId').val(),
+                    StartDate: $('#inputStartDate').val(),
+                    Hour: $('#inputHour').val(),
+                    CarName: $('#inputCarName').val(),
+                    CarModel: $('#inputCarModel').val(),
+                    Description: $('#inputDescription').val(),
+                    Name: $('#inputName').val(),
+                    Surname: $('#inputSurname').val(),
+                    PhoneNumber: $('#inputPhoneNumber').val(),
+                    Plaka: $('#inputPlaka').val(),
+                    il: $('#inputil').val()
+                }
+                console.log(appointment);
+                saveAppointment(appointment);  
+            });
+
+            $('.btnUpdate').click(function () {
+                $('#inputStartDate').val($(this).parents("tr").find(".startDate").text());
+                $('#apointmentId').val($(this).parents("tr").find(".ıd").text())
+                $('#inputDescription').val($(this).parents("tr").find(".description").text());
+                $('#inputCarName').val($(this).parents("tr").find(".carName").text());
+                $('#inputCarModel').val($(this).parents("tr").find(".carModel").text());
+                $('#inputSurname').val($(this).parents("tr").find(".surname").text());
+                $('#inputPlaka').val($(this).parents("tr").find(".plaka").text());
+                $('#inputPhoneNumber').val($(this).parents("tr").find(".phoneNumber").text());
+                $('#inputName').val($(this).parents("tr").find(".name").text());
+                $('#inputil').val($(this).parents("tr").find(".il").text());
+                $('#inputHour').val($(this).parents("tr").find(".hour").text());
+                $('#saveModal').modal();
+              
+            });
+
+           $('.btnDelete').click(function () {
+            if (confirm('Randevuyu silmek istediğinize emin misiniz?')) {
+                var id = $(this).data("id");
+                var btn = $(this);
+                $.ajax({
+                    type: 'DELETE',
+                    url: '/api/Appointments/' + id,
+                    contentType: "application/json; charset=utf-8",
+                    success: function (response) {
+                        
+                            btn.parent().parent().remove();
+                            alertify.success('Randevunuz silinmiştir.');
+                        
+                    },
+                    error: function () {
+
+                        alertify.error('Randevunuz silinirken bir problem oluştu.');
+                    }
+                });
+            }
+        });
+
+          
+
+        });
+    </script>
+}

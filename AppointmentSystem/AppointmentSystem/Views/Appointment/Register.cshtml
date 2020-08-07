@@ -1,0 +1,188 @@
+﻿@model AddOrUpdateAppointmentModel
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.28/moment-timezone-with-data-10-year-range.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="~/lib/jquery-validate/jquery.validate.js"></script>
+</head>
+<body>
+    <div class="modal-body">
+        <form method="POST" id="postForm" >
+            <h6><span style="color:aqua">* Lütfen belirtilen alanları doldurunuz.</span></h6>
+            <div class="row">
+                <div class="form-group col-md-2">
+                </div>
+            </div>
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="row">
+                <input hidden id="appointmentId" />
+                <div class="form-group col-md-6">
+                    <label asp-for="Name" class="form-control-label">Adınız <span style="color:aqua">*</span> </label>
+                    <span class="text-danger" asp-validation-for="Name"></span>
+                    <input asp-for="Name" id="inputName" type="text" class="form-control" />
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label asp-for="Surname" class="form-control-label">Soyadınız <span style="color:aqua">*</span> </label>
+                    <span class="text-danger" asp-validation-for="Surname"></span>
+                    <input asp-for="Surname" id="inputSurname" type="text" class="form-control" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <span class="text-danger" asp-validation-for="il"></span>
+                    <label asp-for="il">İl Seçiniz <span style="color:aqua">*</span></label>
+                   
+                    <select asp-for="il" id="inputil" class="form-control">
+
+
+                        @if (Model.City != null)
+                        {
+                            foreach (var item in Model.City)
+                            {
+                                <option value="@item.Text">@item.Text</option>
+                            }
+                        }
+
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <span class="text-danger" asp-validation-for="CarName"></span>
+                    <label asp-for="CarName">Araba Modelini Seçiniz <span style="color:aqua">*</span></label>
+                  
+                    <select asp-for="CarName" id="inputCarName" class="form-control">
+                        <option value="VELOSTER">VELOSTER</option>
+                        <option value="i30">i30</option>
+                        <option value="GETZ">GETZ</option>
+                        <option value="MATRIX">MATRIX</option>
+                        <option value="İ35">İ35</option>
+                        <option value="ACCENT BLUE">ACCENT BLUE</option>
+                        <option value="GENESİS">GENESİS</option>
+                    </select>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label asp-for="CarModel" class="form-control-label">Model Yılı <span style="color:aqua">*</span> </label>
+                    <span class="text-danger" asp-validation-for="CarModel"></span>
+                    <input asp-for="CarModel" id="inputCarModel" type="number" class="form-control" />
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="PhoneNumber" class="form-control-label">Telefon Numaranız <span style="color:aqua">*</span> </label>
+                    <span class="text-danger" asp-validation-for="PhoneNumber"></span>
+                    <input asp-for="PhoneNumber" id="inputPhoneNumber" type="number" class="form-control" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label asp-for="StartDate" class="form-control-label">Randevu Tarihi <span style="color:aqua">*</span> </label>
+                    <span class="text-danger" asp-validation-for="StartDate"></span>
+                    <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+                        <input asp-for="StartDate" id="inputStartDate" type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1" />
+                        <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label asp-for="Plaka" class="form-control-label">Plakanız <span style="color:aqua">*</span> </label>
+                    <span class="text-danger" asp-validation-for="Plaka"></span>
+                    <input asp-for="Plaka" id="inputPlaka" type="text" class="form-control" />
+                </div>
+              
+
+            </div>
+            <div class="row">
+                <div class="form-group col-md-12">
+
+                    <label asp-for="Hour">Randevu Saati <span style="color:aqua">*</span></label>
+                    <span class="text-danger" asp-validation-for="Hour"></span>
+                    <select asp-for="Hour" id="inputHour" class="form-control">
+                        <option value="09:00">09:00</option>
+                        <option value="09:30">09:30</option>
+                        <option value="10:00">10:00</option>
+                        <option value="10:30">10:30</option>
+                        <option value="11:00">11:00</option>
+                        <option value="11:30">11:30</option>
+                        <option value="13:30">13:30</option>
+                        <option value="14:00">14:00</option>
+                        <option value="14:30">14:30</option>
+                        <option value="15:00">15:00</option>
+                        <option value="15:30">15:30</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-12">
+                    <label asp-for="Description" class="form-control-label">Eklemek İstediğiniz Açıklamayı Buraya Giriniz<span style="color:aqua">*</span> </label>
+                    <span class="text-danger" asp-validation-for="Description"></span>
+                    <textarea asp-for="Description" id="inputDescription" type="text" class="form-control" maxlength="2000" placeholder="Maksimum 2000 karekter"></textarea>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <button id="btnSave" type="submit" class="btn btn-primary">Gönder</button>
+                </div>
+            </div>
+                <div class="row">
+                    <div class="form-group col-md-2">
+                    </div>
+                </div>
+        </form>
+    </div>
+    <script>
+
+        $('#datetimepicker1').datetimepicker({
+            format: 'YYYY-MM-DD'
+        });
+
+
+        $("#postForm").submit(function (e) {
+            e.preventDefault();
+            console.log(e);
+            var appointment = {
+                Id: $('#appointmentId').val(),
+                Name: $('#inputName').val(),
+                Surname: $('#inputSurname').val(),
+                StartDate: $('#inputStartDate').val(),
+                il: $('#inputil').val(),
+                Hour: $('#inputHour').val(),
+                PhoneNumber: $('#inputPhoneNumber').val(),
+                Plaka: $('#inputPlaka').val(),
+                CarName: $('#inputCarName').val(),
+                CarModel: $('#inputCarModel').val(),
+                Description: $('#inputDescription').val()
+            }
+            console.log(appointment);
+            var myJSON = JSON.stringify(appointment);
+            $.ajax({
+                url: 'http://localhost:57877/api/Appointments',
+                type: 'POST',
+                contentType: "application/json; charset=utf-8",
+                data: myJSON,
+                success: function (gelenveri) {
+                    alertify.success('Randevunuz başarıyla eklendi.');
+                    $('input').val("");
+                    $('textarea').val("");
+                    $('select').val("");
+                },
+                error: function (hata) {
+                    alertify.error('Erişim Sağlanamadı.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
