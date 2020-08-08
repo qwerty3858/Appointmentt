@@ -14,9 +14,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.28/moment-timezone-with-data-10-year-range.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
-    <script src="~/lib/jquery-validate/jquery.validate.js"></script>
+  
 </head>
 <body>
+    
     <div class="modal-body">
         <form method="POST" id="postForm" >
             <h6><span style="color:aqua">* Lütfen belirtilen alanları doldurunuz.</span></h6>
@@ -27,7 +28,7 @@
 
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="row">
-                <input hidden id="appointmentId" />
+                
                 <div class="form-group col-md-6">
                     <label asp-for="Name" class="form-control-label">Adınız <span style="color:aqua">*</span> </label>
                     <span class="text-danger" asp-validation-for="Name"></span>
@@ -143,7 +144,7 @@
         </form>
     </div>
     <script>
-
+        
         $('#datetimepicker1').datetimepicker({
             format: 'YYYY-MM-DD'
         });
@@ -153,7 +154,7 @@
             e.preventDefault();
             console.log(e);
             var appointment = {
-                Id: $('#appointmentId').val(),
+              
                 Name: $('#inputName').val(),
                 Surname: $('#inputSurname').val(),
                 StartDate: $('#inputStartDate').val(),
